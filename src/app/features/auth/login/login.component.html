@@ -1,0 +1,337 @@
+<div class="min-h-screen w-full flex flex-col lg:flex-row bg-(--background) font-(family-name:--font-body)">
+
+  <button
+    type="button"
+    (click)="toggleTheme()"
+    class="absolute top-6 right-6 z-30 w-9 h-9 rounded-full border border-(--border) bg-(--surface) flex items-center justify-center text-(--text-secondary) hover:text-(--text-primary) transition-colors shadow-(--shadow-sm) cursor-pointer">
+    <svg *ngIf="!isDark()" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg *ngIf="isDark()" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+    </svg>
+  </button>
+
+  <!-- ───────── Hero panel ───────── -->
+  <div class="relative hidden lg:flex lg:w-[42%] xl:w-[70%] lg:min-h-screen lg:sticky lg:top-0 overflow-hidden rounded-b-3xl lg:rounded-b-none lg:rounded-r-3xl bg-(--surface)">
+
+    <img
+      [src]="isDark() ? 'images/hero-dark.jpg' : 'images/hero-light.jpg'"
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover object-center" />
+
+    <!-- <div class="absolute top-8 left-8 right-10 z-10">
+      <h1 class="font-(family-name:--font-display) font-bold text-3xl text-(--text-primary)">Sanga</h1>
+      <p class="font-(family-name:--font-display) font-semibold text-(--text-secondary) mt-1 mb-6">Your Circle. Your Space.</p>
+    </div> -->
+  </div>
+
+  <!-- ───────── Form panel ───────── -->
+  <div class="flex-1 flex items-center justify-center px-6 py-10 sm:px-10">
+    <div class="w-full max-w-sm">
+
+      <!-- brand header (form panel) -->
+      <div class="mb-8 text-center">
+        <h1 class="font-(family-name:--font-display) font-bold text-3xl text-(--text-primary)">Sanga</h1>
+        <p class="font-(family-name:--font-display) font-semibold text-(--text-secondary) mt-1">Your Circle. Your Space.</p>
+      </div>
+
+      <!-- segmented toggle -->
+      <div class="relative flex bg-(--surface) rounded-full p-1 mb-8 border border-(--border)">
+        <span
+          class="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-full bg-(--primary) shadow-(--shadow-sm) transition-transform duration-300 ease-out"
+          [ngClass]="mode === 'register' ? 'translate-x-[calc(100%+8px)]' : 'translate-x-0'">
+        </span>
+        <button
+          type="button"
+          (click)="switchMode('login')"
+          class="relative z-10 flex-1 py-2.5 text-sm font-semibold rounded-full transition-colors duration-300 cursor-pointer"
+          [ngClass]="mode === 'login' ? 'text-white' : 'text-(--text-secondary)'">
+          Sign In
+        </button>
+        <button
+          type="button"
+          (click)="switchMode('register')"
+          class="relative z-10 flex-1 py-2.5 text-sm font-semibold rounded-full transition-colors duration-300 cursor-pointer"
+          [ngClass]="mode === 'register' ? 'text-white' : 'text-(--text-secondary)'">
+          Create Account
+        </button>
+      </div>
+
+      <!-- sliding form area -->
+      <div class="relative min-h-110">
+
+        <!-- ---- LOGIN ---- -->
+        <div
+          class="absolute inset-0 transition-all duration-500 ease-in-out"
+          [ngClass]="mode === 'login' ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-6 pointer-events-none'">
+
+          <h2 class="font-(family-name:--font-display) font-bold text-2xl text-(--text-primary)">Welcome back 👋</h2>
+          <p class="text-(--text-secondary) text-sm mt-1 mb-6">Sign in to get back to your circle.</p>
+
+          <form (ngSubmit)="handleLogin()" #loginForm="ngForm" class="space-y-4">
+
+            <div class="relative">
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-(--text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-5.5 8.28"></path>
+              </svg>
+              <input
+                type="text"
+                name="identifier"
+                placeholder="Username or Email"
+                [(ngModel)]="loginData.identifier"
+                required
+                class="w-full pl-11 pr-4 py-3 rounded-md border border-(--border) bg-(--surface) text-[15px] text-(--text-primary) placeholder:text-(--text-secondary) focus:outline-none focus:ring-2 focus:ring-(--primary)/30 focus:border-(--primary) transition-all duration-200"
+              />
+            </div>
+
+            <div class="relative">
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-(--text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input
+                [type]="showPw ? 'text' : 'password'"
+                name="password"
+                placeholder="Password"
+                [(ngModel)]="loginData.password"
+                required
+                class="w-full pl-11 pr-11 py-3 rounded-md border border-(--border) bg-(--surface) text-[15px] text-(--text-primary) placeholder:text-(--text-secondary) focus:outline-none focus:ring-2 focus:ring-(--primary)/30 focus:border-(--primary) transition-all duration-200"
+              />
+              <button
+                type="button"
+                (click)="togglePw()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-(--text-secondary) hover:text-(--text-primary) transition-colors cursor-pointer">
+                <svg *ngIf="!showPw" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg *ngIf="showPw" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.86 21.86 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.9 21.9 0 0 1-3.22 4.6"></path>
+                  <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between text-sm pt-1">
+              <label class="flex items-center gap-2 text-(--text-secondary) cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  name="remember"
+                  [(ngModel)]="loginData.remember"
+                  class="rounded border-(--border) text-(--primary) focus:ring-(--primary)/30 cursor-pointer"
+                />
+                Remember me
+              </label>
+              <button type="button" class="text-(--primary) font-medium hover:text-(--primary-hover) transition-colors cursor-pointer hover:underline">
+                Forgot password?
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="loginForm.invalid"
+              class="w-full py-3 rounded-md bg-(--primary) hover:bg-(--primary-hover) text-white font-semibold flex items-center justify-center gap-2 shadow-(--shadow-sm) hover:shadow-(--shadow-md) transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-(--primary) disabled:active:scale-100">
+              Sign In
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <div class="flex items-center gap-3 my-6">
+            <div class="h-px flex-1 bg-(--border)"></div>
+            <span class="text-xs text-(--text-secondary)">or continue with</span>
+            <div class="h-px flex-1 bg-(--border)"></div>
+          </div>
+
+          <div class="flex gap-3">
+            <button type="button" class="flex-1 flex items-center justify-center py-2.5 rounded-md border border-(--border) hover:bg-(--surface) transition-colors duration-200">
+              <svg class="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22 12.2c0-.7-.06-1.4-.19-2H12v3.8h5.6a4.8 4.8 0 0 1-2.08 3.15v2.6h3.36C21 17.9 22 15.3 22 12.2Z" />
+                <path fill="#34A853" d="M12 22c2.8 0 5.15-.92 6.87-2.5l-3.36-2.6c-.93.62-2.13 1-3.51 1-2.7 0-4.98-1.82-5.8-4.27H2.73v2.68A10 10 0 0 0 12 22Z" />
+                <path fill="#FBBC05" d="M6.2 13.63a5.99 5.99 0 0 1 0-3.86V7.09H2.73a10 10 0 0 0 0 8.92l3.47-2.38Z" />
+                <path fill="#EA4335" d="M12 6.5c1.52 0 2.88.52 3.95 1.55l2.96-2.96C17.14 3.4 14.8 2.4 12 2.4a10 10 0 0 0-9.27 6.69l3.47 2.68C6.98 8.32 9.26 6.5 12 6.5Z" />
+              </svg>
+            </button>
+            <button type="button" class="flex-1 flex items-center justify-center py-2.5 rounded-md border border-(--border) hover:bg-(--surface) transition-colors duration-200">
+              <svg class="w-5 h-5 text-(--text-primary)" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.4 1.7c0 1.1-.43 2.06-1.2 2.85-.87.9-2.1 1.55-3.2 1.46-.13-1.06.4-2.17 1.15-2.92C13.95 2.26 15.3 1.65 16.4 1.7Zm3.35 16.65c-.5 1.13-.74 1.63-1.38 2.63-.9 1.4-2.16 3.15-3.73 3.16-1.4.02-1.76-.9-3.66-.9-1.9 0-2.3.88-3.7.92-1.55.05-2.73-1.5-3.63-2.9-2.5-3.85-2.75-8.37-1.22-10.78 1.09-1.7 2.8-2.7 4.42-2.7 1.65 0 2.68.9 4.04.9 1.32 0 2.13-.9 4.03-.9 1.44 0 2.97.78 4.06 2.13-3.57 1.96-2.99 6.98.77 8.44Z" />
+              </svg>
+            </button>
+            <button type="button" class="flex-1 flex items-center justify-center py-2.5 rounded-md border border-(--border) hover:bg-(--surface) transition-colors duration-200">
+              <svg class="w-5 h-5 text-(--text-primary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.1 2 5 2.3 5 2.3a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 3.6 8.7c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- REGISTER ---- -->
+        <div
+          class="absolute inset-0 transition-all duration-500 ease-in-out"
+          [ngClass]="mode === 'register' ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-6 pointer-events-none'">
+
+          <h2 class="font-(family-name:--font-display) font-bold text-2xl text-(--text-primary)">Join your circle 🎉</h2>
+          <p class="text-(--text-secondary) text-sm mt-1 mb-6">Takes less than a minute.</p>
+
+          <form (ngSubmit)="handleRegister()" #registerForm="ngForm" class="space-y-2" novalidate>
+
+            <!-- Display name -->
+            <div>
+              <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-(--text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input
+                  type="text"
+                  name="displayName"
+                  placeholder="Display name"
+                  [(ngModel)]="registerData.displayName"
+                  #displayName="ngModel"
+                  required
+                  minlength="2"
+                  maxlength="100"
+                  [pattern]="displayNamePattern"
+                  class="w-full pl-11 pr-4 py-3 rounded-md border bg-(--surface) text-[15px] text-(--text-primary) placeholder:text-(--text-secondary) focus:outline-none focus:ring-2 transition-all duration-200"
+                  [ngClass]="displayName.invalid && (displayName.dirty || displayName.touched)
+                    ? 'border-red-500 focus:ring-red-500/30 focus:border-red-500'
+                    : 'border-(--border) focus:ring-(--primary)/30 focus:border-(--primary)'"
+                />
+              </div>
+              <p class="text-xs text-red-500 mt-1 min-h-4">
+                <ng-container [ngSwitch]="true" *ngIf="displayName.invalid && (displayName.dirty || displayName.touched)" >
+                  <span *ngIf="displayName.errors?.['required']">Display name is required.</span>
+                  <span *ngIf="displayName.errors?.['minlength']">Must be at least 2 characters.</span>
+                  <span *ngIf="displayName.errors?.['maxlength']">Display name must be 100 characters or fewer.</span>
+                  <span *ngIf="displayName.errors?.['pattern']">Only letters, spaces, apostrophes, and hyphens are allowed.</span>
+                </ng-container>
+              </p>
+            </div>
+
+            <!-- Username / Email -->
+            <div>
+              <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-(--text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-5.5 8.28"></path>
+                </svg>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username or Email"
+                  [(ngModel)]="registerData.username"
+                  #username="ngModel"
+                  required
+                  minlength="3"
+                  maxlength="50"
+                  pattern="^([A-Za-z0-9_]+|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})$"
+                  class="w-full pl-11 pr-4 py-3 rounded-md border bg-(--surface) text-[15px] text-(--text-primary) placeholder:text-(--text-secondary) focus:outline-none focus:ring-2 transition-all duration-200"
+                  [ngClass]="username.invalid && (username.dirty || username.touched)
+                    ? 'border-red-500 focus:ring-red-500/30 focus:border-red-500'
+                    : 'border-(--border) focus:ring-(--primary)/30 focus:border-(--primary)'"
+                />
+              </div>
+              <p class="text-xs text-red-500 mt-1 min-h-4">
+                <ng-container *ngIf="username.invalid && (username.dirty || username.touched)" [ngSwitch]="true">
+                  <span *ngIf="username.errors?.['required']">Username or email is required.</span>
+                  <span *ngIf="username.errors?.['minlength']">Must be at least 3 characters.</span>
+                  <span *ngIf="username.errors?.['maxlength']">Must be 50 characters or fewer.</span>
+                  <span *ngIf="username.errors?.['pattern']">Enter a valid username (letters, numbers, underscores) or email address.</span>
+                </ng-container>
+              </p>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-(--text-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input
+                  [type]="showPw ? 'text' : 'password'"
+                  name="password"
+                  placeholder="Password"
+                  [(ngModel)]="registerData.password"
+                  #password="ngModel"
+                  required
+                  minlength="8"
+                  maxlength="72"
+                  class="w-full pl-11 pr-11 py-3 rounded-md border bg-(--surface) text-[15px] text-(--text-primary) placeholder:text-(--text-secondary) focus:outline-none focus:ring-2 transition-all duration-200"
+                  [ngClass]="password.invalid && (password.dirty || password.touched)
+                    ? 'border-red-500 focus:ring-red-500/30 focus:border-red-500'
+                    : 'border-(--border) focus:ring-(--primary)/30 focus:border-(--primary)'"
+                />
+                <button
+                  type="button"
+                  (click)="togglePw()"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 text-(--text-secondary) hover:text-(--text-primary) transition-colors cursor-pointer">
+                  <svg *ngIf="!showPw" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg *ngIf="showPw" class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.86 21.86 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.9 21.9 0 0 1-3.22 4.6"></path>
+                    <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <p class="text-xs text-red-500 mt-1 min-h-4">
+                <ng-container [ngSwitch]="true" *ngIf="password.invalid && (password.dirty || password.touched)">
+                  <span *ngIf="password.errors?.['required']">Password is required.</span>
+                  <span *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</span>
+                  <span *ngIf="password.errors?.['maxlength']">Password must be 72 characters or fewer.</span>
+                </ng-container>
+              </p>
+            </div>
+
+            <p class="text-xs text-(--text-secondary) pt-1">
+              By creating an account you agree to Sanga's Terms &amp; Privacy Policy.
+            </p>
+
+            <button
+              type="submit"
+              [disabled]="registerForm.invalid"
+              class="w-full py-3 rounded-md bg-(--primary) hover:bg-(--primary-hover) text-white font-semibold flex items-center justify-center gap-2 shadow-(--shadow-sm) hover:shadow-(--shadow-md) transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-(--primary) disabled:active:scale-100">
+              Create Account
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- footer switch line -->
+      <p class="text-center text-sm text-(--text-secondary) mt-6">
+        <ng-container *ngIf="mode === 'login'; else toLogin">
+          New to SANGA?
+          <button (click)="switchMode('register')" class="text-(--primary) font-semibold hover:text-(--primary-hover) transition-colors cursor-pointer hover:underline">
+            Create an account
+          </button>
+        </ng-container>
+        <ng-template #toLogin>
+          Already have an account?
+          <button (click)="switchMode('login')" class="text-(--primary) font-semibold hover:text-(--primary-hover) transition-colors cursor-pointer hover:underline">
+            Sign in
+          </button>
+        </ng-template>
+      </p>
+    </div>
+  </div>
+</div>

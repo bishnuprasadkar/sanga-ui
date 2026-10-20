@@ -1,0 +1,21 @@
+@keyframes net-pulse {
+  0%, 100% { opacity: .3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes net-draw {
+  0% { stroke-dasharray: 0 400; }
+  100% { stroke-dasharray: 400 0; }
+}
+
+.net-node {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: net-pulse 3.2s ease-in-out infinite;
+}
+.net-line {
+  animation: net-draw 2.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .net-node, .net-line { animation: none; }
+}
